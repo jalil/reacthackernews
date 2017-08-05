@@ -63,6 +63,7 @@ onSearchChange(event) {
       <form >
         <input 
            type="text" 
+           value={searchTerm}
            onChange={this.onSearchChange}
            />
       </form>
