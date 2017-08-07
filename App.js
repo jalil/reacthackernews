@@ -48,7 +48,7 @@ class App extends Component {
     this.onSearchChange = this.onSearchChange.bind(this);
     this.setSearchTopstories = this.setSearchTopstories.bind(this); 
     this.fetchSearchTopstories = this.fetchSearchTopstories.bind(this);
-this.onSearchSubmit = this.onSearchSubmit.bind(this);
+    this.onSearchSubmit = this.onSearchSubmit.bind(this);
   }
 
 onDismiss(id) {
@@ -81,6 +81,13 @@ componentDidMount() {
      const { searchTerm } = this.state;
      this.fetchSearchTopstories(searchTerm);
 }
+
+onSearchSubmit(event) {
+      const { searchTerm } = this.state;
+      this.fetchSearchTopstories(searchTerm);
+      event.preventDefault();
+}
+
   render() {
 
     const { searchTerm, result } = this.state;
@@ -91,6 +98,7 @@ componentDidMount() {
             <Search 
                 value={searchTerm}
                 onChange={this.onSearchChange}
+                onSubmit={this.onSearchSubmit}
 
             > 
               Search
@@ -100,7 +108,6 @@ componentDidMount() {
            { result
                ?  <Table
                list={result.hits}
-               pattern={searchTerm}
                onDismiss={this.onDismiss}
                />
              : null
@@ -112,9 +119,9 @@ componentDidMount() {
 }
 
 function Search(props) {
-    const { value,children, onChange} = props;
+    const { value,children, onChange, onSubmit} = props;
         return (
-              <form >
+              <form  onSubmit={onSubmit}>
               {children}
                 <input 
                    type="text" 
@@ -128,10 +135,10 @@ function Search(props) {
 
 function  Table(props)  {
 
-    const { list, pattern, onDismiss } = props;
+    const { list, onDismiss } = props;
         return (
                 <div>
-        {list.filter(isSearched(pattern)).map((item) =>(
+        {list.map((item) =>(
              <div key={item.objectID}>
                 <span>
                 <a href={item.url} >  {item.title} </a>
